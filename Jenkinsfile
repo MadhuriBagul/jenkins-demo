@@ -3,13 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/MadhuriBagul/jenkins-demo.git'
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
                 sh 'podman build -t myapp .'
             }
@@ -17,7 +11,8 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                sh 'podman run -d -p 8081:80 --name myapp-container myapp || true'
+                sh 'podman rm -f myapp-container || true'
+                sh 'podman run -d -p 8081:80 --name myapp-container myapp'
             }
         }
     }
